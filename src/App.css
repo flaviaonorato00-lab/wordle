@@ -1,3 +1,10 @@
+.app {
+  min-height: 100vh; /* l'elemento deve essere alto almeno quanto tutta la finestra del browser */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .game-board {
   display: flex;
   flex-direction: column;
@@ -13,5 +20,13 @@
 .letter-box {
   width: 60px;
   height: 60px;
-  border: 2px solid black;
+  border: 2px solid #d3d6da;
+
+  display: flex; /* trasforma ogni casella in un flex container  */
+  align-items: center; /* centriamo verticalmente il contentuto */
+  justify-content: center;  /* centriamo orizzontalmente il contentuto */
+
+  font-size: 32px; /* grandezza lettere */
+  font-weight: bold;
+  text-transform: uppercase;
 }

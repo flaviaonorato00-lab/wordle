@@ -1,15 +1,11 @@
 function GameRow() {
 
     return(
-        <>
         <div className="game-row">
-            <div className="letter-box"></div>
-            <div className="letter-box"></div>
-            <div className="letter-box"></div>
-            <div className="letter-box"></div>
-            <div className="letter-box"></div>
+            {Array.from({ length: 5 }).map((_, index) => (
+                <div className="letter-box" key={index}></div>
+            ))}
         </div>
-        </>
     )
 }
 
