@@ -15,6 +15,10 @@ function App() {
       return
     }
 
+    if (guesses.length >= 6) {
+      return
+    }
+
     setGuesses([...guesses, currentGuess])
     setCurrentGuess("")
   }
