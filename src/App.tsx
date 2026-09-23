@@ -2,14 +2,22 @@ import { useState, type FormEvent } from 'react'
 import './App.css'
 import GameRow from './GameRow'
 
+const secretWord = "CARTA";
+
+type GameStatus = "playing" | "won" | "lost";
 
 function App() {
 
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>([]);
+  const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (gameStatus !== "playing") {
+      return
+    }
 
     if (currentGuess.length !== 5) {
       return
@@ -20,6 +28,13 @@ function App() {
     }
 
     setGuesses([...guesses, currentGuess])
+
+    if (currentGuess === secretWord) {
+      setGameStatus("won")
+    } else if (guesses.length === 5) {
+      setGameStatus("lost")
+    }
+
     setCurrentGuess("")
   }
 
@@ -43,8 +58,11 @@ function App() {
         <input type="text"
           value={currentGuess}
           maxLength={5}
+          disabled={gameStatus !== "playing"}
           onChange={(e) => setCurrentGuess(e.target.value.toLocaleUpperCase())} />
       </form>
+      {gameStatus === "won" && <p>You won!</p>}
+      {gameStatus === "lost" && <p>You lost!</p>}
     </main>
   )
 }
