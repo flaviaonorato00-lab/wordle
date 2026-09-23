@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import './App.css'
 import GameRow from './GameRow'
+import { evaluateGuess } from './utils/evaluateGuess'
 
 const secretWord = "CARTA";
 
@@ -27,6 +28,10 @@ function App() {
       return
     }
 
+    const evaluation = evaluateGuess(currentGuess, secretWord)
+
+    console.log(evaluation)
+
     setGuesses([...guesses, currentGuess])
 
     if (currentGuess === secretWord) {
@@ -50,7 +55,7 @@ function App() {
               guesses[index] ?? /* nullish coalescing operator => if the left is "null" or undefined" then use the code on the right*/
               (index === guesses.length ? currentGuess : "")
             }
-             />
+          />
         ))}
       </div>
 
