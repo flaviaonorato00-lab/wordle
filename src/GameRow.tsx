@@ -1,15 +1,21 @@
+import LetterBox from './LetterBox'
+import type { LetterResult } from './utils/evaluateGuess'
+
 type GameRowProps = {
     word: string
+    evaluation?: LetterResult[]
 }
 
-function GameRow({ word }: GameRowProps) {
+function GameRow({ word, evaluation }: GameRowProps) {
 
     return(
         <div className="game-row">
             {Array.from({ length: 5 }).map((_, index) => (
-                <div className="letter-box" key={index}>
-                    {word[index]}
-                </div>
+                <LetterBox 
+                key={index}
+                letter={word[index] ?? ""}
+                status={evaluation?.[index]?.status} /* optional chaining => try to get the element, but if it doesn't exist don't return error but undefined */
+                />
             ))}
         </div>
     )

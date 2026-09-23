@@ -55,6 +55,11 @@ function App() {
               guesses[index] ?? /* nullish coalescing operator => if the left is "null" or undefined" then use the code on the right*/
               (index === guesses.length ? currentGuess : "")
             }
+            evaluation={
+              guesses[index]
+                ? evaluateGuess(guesses[index], secretWord)
+                : undefined
+            }
           />
         ))}
       </div>
