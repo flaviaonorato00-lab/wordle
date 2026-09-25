@@ -3,6 +3,7 @@ import './App.css'
 import GameBoard from './GameBoard'
 import { validWords, solutionWords } from './data/words'
 import Keyboard from './Keyboard'
+import { Analytics } from "@vercel/analytics/react";
 
 function getRandomWord() {
   const randomIndex = Math.floor(Math.random() * solutionWords.length)
@@ -87,6 +88,7 @@ function App() {
 
   return (
     <main className="app" translate="no">
+      <Analytics/>
       <h1>WORDLE</h1>
 
       <GameBoard
