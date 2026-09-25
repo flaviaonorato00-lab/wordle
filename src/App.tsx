@@ -22,10 +22,10 @@ function App() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-  if (gameStatus === "playing") {
-    inputRef.current?.focus()
-  }
-}, [gameStatus]);
+    if (gameStatus === "playing") {
+      inputRef.current?.focus()
+    }
+  }, [gameStatus]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -86,7 +86,7 @@ function App() {
   }
 
   return (
-    <main className="app" translate="no"> 
+    <main className="app" translate="no">
       <h1>WORDLE</h1>
 
       <GameBoard
@@ -120,9 +120,9 @@ function App() {
       <form onSubmit={handleSubmit}>
         <input
           ref={inputRef}
-          autoFocus
           className="hidden-input"
           type="text"
+          inputMode="none"
           value={currentGuess}
           maxLength={5}
           disabled={gameStatus !== "playing"}
