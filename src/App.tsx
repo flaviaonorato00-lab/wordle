@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import './App.css'
 import GameBoard from './GameBoard'
-import { validWords } from './data/words'
+import { validWords, solutionWords } from './data/words'
 import Keyboard from './Keyboard'
 
 function getRandomWord() {
-  const randomIndex = Math.floor(Math.random() * validWords.length)
-  return validWords[randomIndex]
+  const randomIndex = Math.floor(Math.random() * solutionWords.length)
+  return solutionWords[randomIndex]
 }
 
 type GameStatus = "playing" | "won" | "lost";
