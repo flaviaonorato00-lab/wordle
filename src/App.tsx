@@ -1,4 +1,4 @@
-import { useState, useRef, type FormEvent } from 'react'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
 import './App.css'
 import GameBoard from './GameBoard'
 import { validWords } from './data/words'
@@ -20,6 +20,12 @@ function App() {
   const [secretWord, setSecretWord] = useState<string>(getRandomWord())
 
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+  if (gameStatus === "playing") {
+    inputRef.current?.focus()
+  }
+}, [gameStatus]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
