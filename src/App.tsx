@@ -103,7 +103,10 @@ function App() {
           onLetter={handleKeyboardLetter}
           onDelete={handleKeyboardDelete}
           disabled={gameStatus !== "playing"}
+          guesses={guesses}
+          secretWord={secretWord}
         />
+
       </form>
 
       {errorMessage && <p>{errorMessage}</p>}
