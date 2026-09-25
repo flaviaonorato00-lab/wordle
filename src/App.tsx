@@ -1,11 +1,13 @@
 import { useState, useRef, type FormEvent } from 'react'
 import './App.css'
 import GameBoard from './GameBoard'
-import { evaluateGuess } from './utils/evaluateGuess'
 import { validWords } from './data/words'
 import Keyboard from './Keyboard'
 
-const secretWord = validWords[Math.floor(Math.random() * validWords.length)];
+function getRandomWord() {
+  const randomIndex = Math.floor(Math.random() * validWords.length)
+  return validWords[randomIndex]
+}
 
 type GameStatus = "playing" | "won" | "lost";
 
@@ -15,6 +17,7 @@ function App() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [secretWord, setSecretWord] = useState<string>(getRandomWord())
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -28,6 +31,7 @@ function App() {
     }
 
     if (currentGuess.length !== 5) {
+      setErrorMessage("Word must be 5 letters")
       return
     }
 
@@ -39,10 +43,6 @@ function App() {
     if (guesses.length >= 6) {
       return
     }
-
-    const evaluation = evaluateGuess(currentGuess, secretWord)
-
-    console.log(evaluation)
 
     setGuesses([...guesses, currentGuess])
 
@@ -71,6 +71,14 @@ function App() {
     inputRef.current?.focus()
   }
 
+  function handleNewGame() {
+    setCurrentGuess("")
+    setGuesses([])
+    setGameStatus("playing")
+    setErrorMessage("")
+    setSecretWord(getRandomWord())
+  }
+
   return (
     <main className="app">
       <h1>WORDLE</h1>
@@ -80,6 +88,28 @@ function App() {
         currentGuess={currentGuess}
         secretWord={secretWord}
       />
+
+      {errorMessage && (
+        <p className="error-message">{errorMessage}</p>
+      )}
+
+      {gameStatus !== "playing" && (
+        <div className="game-result">
+
+          <p className="game-message">
+            {gameStatus === "won"
+              ? "You won! 🎉"
+              : `You lost! The word was ${secretWord}`}
+          </p>
+
+          <button type="button"
+            className="new-game-button"
+            onClick={handleNewGame}>
+            NEW GAME
+          </button>
+
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
         <input
@@ -108,13 +138,6 @@ function App() {
         />
 
       </form>
-
-      {errorMessage && <p>{errorMessage}</p>}
-
-      {gameStatus === "won" && <p>You won!</p>}
-      {gameStatus === "lost" && <p>You lost!</p>}
-
-
 
     </main>
   )
