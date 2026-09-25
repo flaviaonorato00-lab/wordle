@@ -86,7 +86,7 @@ function App() {
   }
 
   return (
-    <main className="app">
+    <main className="app" translate="no"> 
       <h1>WORDLE</h1>
 
       <GameBoard
