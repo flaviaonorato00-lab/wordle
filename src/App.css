@@ -3,30 +3,39 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
+
+.app h1 {
+  font-size: 64px;
+  margin: 0 0 12px;
+  margin-top: 24px;
+  margin-bottom: 30px;
 }
 
 .game-board {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   align-items: center;
 }
 
 .game-row {
   display: flex;
-  gap: 5px;
+  gap: 4px;
 }
 
 .letter-box {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border: 2px solid #d3d6da;
 
   display: flex; /* trasforma ogni casella in un flex container  */
   align-items: center; /* centriamo verticalmente il contentuto */
   justify-content: center;  /* centriamo orizzontalmente il contentuto */
 
-  font-size: 32px; /* grandezza lettere */
+  font-size: 30px; /* grandezza lettere */
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -47,4 +56,101 @@
   background-color: #787c7e;
   color: white;
   border-color: #787c7e;
+}
+
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.keyboard-key {
+  min-width: 48px;
+  height: 46px;
+  padding: 0 10px;
+
+  border: none;
+  border-radius: 5px;
+
+  font-size: 17px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.keyboard-row:last-child .keyboard-key {
+  min-width: 90px;
+}
+
+.keyboard-key.correct {
+  background-color: #6aaa64;
+  color: white;
+}
+
+.keyboard-key.present {
+  background-color: #c9b458;
+  color: white;
+}
+
+.keyboard-key.absent {
+  background-color: #787c7e;
+  color: white;
+}
+
+.game-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 12px;
+}
+
+.game-message {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.new-game-button {
+  padding: 10px 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: #6aaa64;
+  color: white;
+
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+}
+
+.new-game-button:hover {
+transform: scale(0.97);
+}
+
+.error-message {
+  margin: 8px 0 0;
+  font-size: 15px;
+  font-weight: 600;
 }

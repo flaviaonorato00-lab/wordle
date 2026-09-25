@@ -1,10 +1,13 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
 import './App.css'
-import GameRow from './GameRow'
-import { evaluateGuess } from './utils/evaluateGuess'
-import { validWords } from './data/words'
+import GameBoard from './GameBoard'
+import { validWords, solutionWords } from './data/words'
+import Keyboard from './Keyboard'
 
-const secretWord = validWords[Math.floor(Math.random() * validWords.length)];
+function getRandomWord() {
+  const randomIndex = Math.floor(Math.random() * solutionWords.length)
+  return solutionWords[randomIndex]
+}
 
 type GameStatus = "playing" | "won" | "lost";
 
@@ -14,15 +17,27 @@ function App() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [secretWord, setSecretWord] = useState<string>(getRandomWord())
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+  if (gameStatus === "playing") {
+    inputRef.current?.focus()
+  }
+}, [gameStatus]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    inputRef.current?.focus()
 
     if (gameStatus !== "playing") {
       return
     }
 
     if (currentGuess.length !== 5) {
+      setErrorMessage("Word must be 5 letters")
       return
     }
 
@@ -35,10 +50,6 @@ function App() {
       return
     }
 
-    const evaluation = evaluateGuess(currentGuess, secretWord)
-
-    console.log(evaluation)
-
     setGuesses([...guesses, currentGuess])
 
     if (currentGuess === secretWord) {
@@ -50,29 +61,68 @@ function App() {
     setCurrentGuess("")
   }
 
+  function handleKeyboardLetter(letter: string) {
+    if (currentGuess.length < 5) {
+      setCurrentGuess(currentGuess + letter)
+      setErrorMessage("")
+    }
+
+    inputRef.current?.focus() // find the input connected with "inputRef" and give it the new focus
+  }
+
+  function handleKeyboardDelete() {
+    setCurrentGuess(currentGuess.slice(0, -1))
+    setErrorMessage("")
+
+    inputRef.current?.focus()
+  }
+
+  function handleNewGame() {
+    setCurrentGuess("")
+    setGuesses([])
+    setGameStatus("playing")
+    setErrorMessage("")
+    setSecretWord(getRandomWord())
+  }
+
   return (
     <main className="app">
       <h1>WORDLE</h1>
 
-      <div className="game-board">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <GameRow
-            key={index}
-            word={
-              guesses[index] ?? /* nullish coalescing operator => if the left is "null" or undefined" then use the code on the right*/
-              (index === guesses.length ? currentGuess : "")
-            }
-            evaluation={
-              guesses[index]
-                ? evaluateGuess(guesses[index], secretWord)
-                : undefined
-            }
-          />
-        ))}
-      </div>
+      <GameBoard
+        guesses={guesses}
+        currentGuess={currentGuess}
+        secretWord={secretWord}
+      />
+
+      {errorMessage && (
+        <p className="error-message">{errorMessage}</p>
+      )}
+
+      {gameStatus !== "playing" && (
+        <div className="game-result">
+
+          <p className="game-message">
+            {gameStatus === "won"
+              ? "You won! 🎉"
+              : `You lost! The word was ${secretWord}`}
+          </p>
+
+          <button type="button"
+            className="new-game-button"
+            onClick={handleNewGame}>
+            NEW GAME
+          </button>
+
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
-        <input type="text"
+        <input
+          ref={inputRef}
+          autoFocus
+          className="hidden-input"
+          type="text"
           value={currentGuess}
           maxLength={5}
           disabled={gameStatus !== "playing"}
@@ -84,15 +134,17 @@ function App() {
               setErrorMessage("")
             }
           }} />
+
+        <Keyboard
+          onLetter={handleKeyboardLetter}
+          onDelete={handleKeyboardDelete}
+          disabled={gameStatus !== "playing"}
+          guesses={guesses}
+          secretWord={secretWord}
+        />
+
       </form>
 
-      {errorMessage && <p>{errorMessage}</p>}
-
-      {gameStatus === "won" && <p>You won!</p>}
-      {gameStatus === "lost" && <p>You lost!</p>}
-
-
-      <p>{secretWord}</p>
     </main>
   )
 }

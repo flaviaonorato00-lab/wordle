@@ -1,20 +1,8 @@
-export const validWords = [
-  "APPLE",
-  "BEACH",
-  "BRAIN",
-  "CHAIR",
-  "CLOUD",
-  "DREAM",
-  "EARTH",
-  "GREEN",
-  "HOUSE",
-  "LIGHT",
-  "MONEY",
-  "NIGHT",
-  "PLANT",
-  "RIVER",
-  "STONE",
-  "TABLE",
-  "WATER",
-  "WORLD",
-]
+import  englishWords from "an-array-of-english-words"
+import { solutionWords } from "./solutionWords"
+
+export { solutionWords }
+
+export const validWords = englishWords
+  .filter((word) => word.length === 5)
+  .map((word) => word.toUpperCase())
