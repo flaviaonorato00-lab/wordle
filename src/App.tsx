@@ -4,6 +4,8 @@ import GameBoard from './GameBoard'
 import { validWords, solutionWords } from './data/words'
 import Keyboard from './Keyboard'
 import { Analytics } from "@vercel/analytics/react";
+import StatsModal from './StatsModal'
+import { loadStats, saveStats, recordGame, type GameStats } from './utils/stats'
 
 function getRandomWord() {
   const randomIndex = Math.floor(Math.random() * solutionWords.length)
@@ -19,6 +21,16 @@ function App() {
   const [gameStatus, setGameStatus] = useState<GameStatus>("playing");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [secretWord, setSecretWord] = useState<string>(getRandomWord())
+  const [stats, setStats] = useState<GameStats>(loadStats) // read saved stats only once, on first render
+  const [showStats, setShowStats] = useState<boolean>(false)
+
+  // save, then show the stats when a game ends (called once per finished game)
+  function finishGame(won: boolean, guessCount: number) {
+    const newStats = recordGame(stats, won, guessCount)
+    setStats(newStats)
+    saveStats(newStats)
+    setShowStats(true)
+  }
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -55,8 +67,10 @@ function App() {
 
     if (currentGuess === secretWord) {
       setGameStatus("won")
+      finishGame(true, guesses.length + 1)
     } else if (guesses.length === 5) {
       setGameStatus("lost")
+      finishGame(false, 6)
     }
 
     setCurrentGuess("")
@@ -84,15 +98,45 @@ function App() {
     setGameStatus("playing")
     setErrorMessage("")
     setSecretWord(getRandomWord())
+    setShowStats(false)
   }
 
   return (
     <main className="app" translate="no">
       <Analytics/>
-      <h1>WORDLE</h1>
+      <header className="app-header">
+        <h1>WORDLE</h1>
+        <button
+          type="button"
+          className="stats-button"
+          aria-label="Show statistics"
+          onClick={() => setShowStats(true)}
+        >
+          📊
+        </button>
+      </header>
+
+      {showStats && (
+        <StatsModal
+          stats={stats}
+          highlightRow={gameStatus === "won" ? guesses.length : null}
+          onClose={() => {
+            setShowStats(false)
+            inputRef.current?.focus()
+          }}
+          onNewGame={gameStatus !== "playing" ? handleNewGame : undefined}
+          resultMessage={
+            gameStatus === "won"
+              ? "You won! 🎉"
+              : gameStatus === "lost"
+                ? `You lost! The word was ${secretWord}`
+                : undefined
+          }
+        />
+      )}
 
       <GameBoard
-        guesses={guesses}
+        guesses={guesses} // to show the word in the line 
         currentGuess={currentGuess}
         secretWord={secretWord}
       />

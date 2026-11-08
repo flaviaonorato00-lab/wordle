@@ -155,7 +155,155 @@ transform: scale(0.97);
   font-weight: 600;
 }
 
+/* ---------- header + stats button ---------- */
+
+.app-header {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stats-button {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 6px;
+
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* ---------- stats modal ---------- */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* top, right, bottom, left = 0: covers the whole screen */
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 28px 24px 24px;
+
+  border-radius: 10px;
+  background-color: var(--bg);
+  color: var(--text-h);
+  box-shadow: var(--shadow);
+}
+
+.modal h2 {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  margin: 0 0 14px;
+}
+
+.modal h3 {
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  margin: 22px 0 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.distribution-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.distribution-label {
+  width: 12px;
+}
+
+.distribution-track {
+  flex: 1;
+}
+
+.distribution-bar {
+  box-sizing: border-box;
+  padding: 1px 8px;
+  text-align: right;
+
+  background-color: #787c7e;
+  color: white;
+}
+
+.distribution-bar.highlight {
+  background-color: #6aaa64;
+}
+
+.modal-result {
+  margin: 0 0 18px;
+}
+
+.modal .new-game-button {
+  margin-top: 22px;
+}
+
 @media (max-width: 600px) {
+  .stats-button {
+    right: 12px;
+    font-size: 26px;
+  }
+
   form {
     width: 100%;
   }
